@@ -3,6 +3,9 @@ from datetime import datetime, timedelta
 import xml.etree.ElementTree as ET
 import pandas as pd
 from datetime import datetime, timedelta
+from icecream import ic
+from typing import List, Tuple
+
 
 def xml_to_gen_data(xml_data) -> dict:
     """
@@ -120,3 +123,12 @@ def perform_get_request(base_url, params):
         return response.text
     else:
         return response.content
+    
+def split_date_range(start_date:datetime, end_date:datetime, interval:timedelta) -> List[Tuple[datetime, datetime]]:
+    assert start_date < end_date
+    ranges = []
+    while start_date < end_date:
+        range_end_date = min(start_date + interval, end_date)
+        ranges.append((start_date, range_end_date))
+        start_date = range_end_date
+    return ranges
